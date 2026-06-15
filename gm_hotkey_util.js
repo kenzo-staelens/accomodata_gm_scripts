@@ -1,15 +1,12 @@
 // ==UserScript==
 // @name         Hotkey script util
 // @namespace    accomodata
-// @version      2025-08-04
+// @version      1.0.2
 // @description  base classes and functionalities for hotkey script
 // @author       Kenzo Staelens
-// @match        *://*/*
 // @require      http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js
 // @icon         data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==
-// @grant        GM_addStyle
 // ==/UserScript==
-
 
 class HotkeyBinding {
     constructor({key, action, name=null, description=null, modifiers=null}) {
@@ -68,11 +65,18 @@ class HotkeyBinding {
 unsafeWindow.HotkeyBinding = HotkeyBinding;
 unsafeWindow.KEYBINDS = [
     // eslint-disable-next-line
-    new HotkeyBinding({key: 192, modifiers:['c'], name:"Ctrl ²", description : "My Bindings",      action : build_popup} ),
+    new HotkeyBinding({key: 192, modifiers:['c'], name:"Ctrl ²",    description: "My Bindings",        action: build_popup} ),
+    //eslint-disable-next-line
+    new HotkeyBinding({key: 27,  modifiers:['c'], name: "Ctrl ESC", description: "Toggle Debug Mode",  action: ()=>{unsafeWindow.debug_keybinds = !unsafeWindow.debug_keybinds}}),
 ];
 
-
+unsafeWindow.debug_keybinds = false;
 let onKeyDown = (e) => {
+    if (unsafeWindow.debug_keybinds){
+        //debug code, detected keybind is a little awkward at times
+        // this prints the actual detected key on key down -> use in future hotkeys
+        console.log(e.which === 0 ? e.charCode : e.keyCode);
+    }
     for(let bind of unsafeWindow.KEYBINDS){
        if (bind.is_binding(e)){
            bind.execute_binding();
@@ -112,32 +116,40 @@ function build_popup(){
     document.body.appendChild(root);
 }
 
+function CreateStyle(s){
+    let head = document.getElementsByTagName('head')[0]
+    let s_el = document.createElement('style');
+    s_el.innerText = s;
+    head.appendChild(s_el);
+}
+
+
 //eslint-disable-next-line
-GM_addStyle ( "                                                 \
-    #gmPopupContainer {                                         \
-        position:               fixed;                          \
-        top:                    5%;                            \
-        left:                   5%;                            \
-        padding:                2em;                            \
-        border:                 3px double black;               \
-        border-radius:          1ex;                            \
-        z-index:                9999;                            \
-        color:                  #121212;                        \
-        background:             #f8f8f2;                        \
-    }                                                           \
-    #gmPopupContainer button{                                   \
-        cursor:                 pointer;                        \
-        margin:                 1em 1em 0;                      \
-        border:                 1px outset buttonface;          \
-    }                                                           \
-    #gmPopupContainer td{                                       \
-        border:                 1px solid black;                \
-        padding:                5px;                            \
-    }                                                           \
-" );
+CreateStyle(`
+    #gmPopupContainer {
+        position:               fixed;
+        top:                    5%;
+        left:                   5%;
+        padding:                2em;
+        border:                 3px double black;
+        border-radius:          1ex;
+        z-index:                9999;
+        color:                  #121212;
+        background:             #f8f8f2;
+    }
+    #gmPopupContainer button{
+        cursor:                 pointer;
+        margin:                 1em 1em 0;
+        border:                 1px outset buttonface;
+    }
+    #gmPopupContainer td{
+        border:                 1px solid black;
+        padding:                5px;
+    }
+`);
 
 (function() {
     'use strict';
-    document.addEventListener("keydown", onKeyDown);
+     document.addEventListener("keydown", onKeyDown)
 })();
 
