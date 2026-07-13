@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Hotkey script util
 // @namespace    accomodata
-// @version      1.0.2
+// @version      1.0.3
 // @description  base classes and functionalities for hotkey script
 // @author       Kenzo Staelens
 // @require      http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js
@@ -100,11 +100,24 @@ function build_popup(){
         const node = document.createElement("tr");
         const left = document.createElement("td");
         const right = document.createElement("td");
-        left.innerText = bind.name;
+        const anchor = document.createElement("a");
+        anchor.href = "#";
+        anchor.innerText = bind.name;
+        left.appendChild(anchor);
+
         right.innerText = bind.description;
+
         node.appendChild(left);
         node.appendChild(right);
+
         table.appendChild(node);
+        anchor.onclick = function(e) {
+            e.preventDefault(); //should cause anchor default to be ignored
+            // execute the binding when the "menu item" is clicked
+            bind.execute_binding();
+            try{check.remove();}catch(e){};
+            return false; //just make sure to never redirect by anchor.. just in case
+        }
     }
 
     let button = document.createElement('button');
