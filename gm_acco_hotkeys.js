@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Hotkey script
 // @namespace    accomodata
-// @version      1.0.1
+// @version      1.0.2
 // @description  Add hotkeys to the environment
 // @author       Kenzo Staelens
 // @match        *://*.accomodata.be/*
@@ -26,7 +26,7 @@ function bind_goto_taskid(host){
     unsafeWindow.KEYBINDS.push(
         new HotkeyBinding({key: '1', modifiers:['c', 's'], name:"Ctrl+Shift 1", description :"Infrastructure", action : "/odoo/action-2945?debug=1" }),
         new HotkeyBinding({key: '1', modifiers:['c'],      name:"Ctrl 1",       description :"My Tasks",       action : "/odoo/my-tasks?debug=1" }),
-        new HotkeyBinding({key: '2', modifiers:['c'],      name:"Ctrl 2",       description :"Internal Tasks", action : "/odoo/timesheets/project.task/19299" }),
+        new HotkeyBinding({key: '2', modifiers:['c'],      name:"Ctrl 2",       description :"My HR Project",  action : "/odoo/project.project/2103" }),
         new HotkeyBinding({key: '3', modifiers:['c'],      name:"Ctrl 3",       description :"Infra Helpdesk", action : "/odoo/helpdesk/11/tickets" }),
         new HotkeyBinding({key: '4', modifiers:['c'],      name:"Ctrl 4",       description :"My timesheets",  action : "/odoo/timesheets" }),
         new HotkeyBinding({key: ';', modifiers:['c'],      name:"Ctrl ;",       description :"GOTO task id",   action : bind_goto_taskid }),
